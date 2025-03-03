@@ -35,7 +35,7 @@ def appointment(request):
        myappointment.save()
 
 
-       return redirect('/appointment')
+       return redirect('/show')
     else:
         return render (request,'appointment.html')
 
@@ -45,4 +45,26 @@ def staff(request):
 
 
 def contact(request):
-    return render(request, 'contact.html')
+    if request.method == "POST" :
+       mycontact = Contact(
+            name = request.POST['name'],
+            email = request.POST['email'],
+            subject = request.POST['subject'],
+            message = request.POST['message'],
+       )
+       mycontact.save()
+
+
+       return redirect('/contact')
+    else:
+        return render (request,'contact.html')
+
+
+def show(request):
+      all= Appointment.objects.all()
+      return render(request,'show.html',{'all':all})
+
+def delete(request,id):
+    deletedappointment=Appointment.objects.get(id=id)
+    deletedappointment.delete()
+    return redirect('/show')
